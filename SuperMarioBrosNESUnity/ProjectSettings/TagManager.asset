@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - fondo
+  - suelo
+  - plataforma
+  - personajes
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: fondo
+    uniqueID: 2143523681
+    locked: 0
+  - name: suelo
+    uniqueID: 1345156135
+    locked: 0
+  - name: plataforma
+    uniqueID: 1146474189
+    locked: 0
+  - name: personajes
+    uniqueID: 2986575573
+    locked: 0
+  - name: 
+    uniqueID: 1359324425
+    locked: 0
+  - name: 
+    uniqueID: 4262351149
+    locked: 0
+  - name: 
+    uniqueID: 2005044017
+    locked: 0
