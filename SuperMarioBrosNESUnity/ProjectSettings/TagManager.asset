@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - mario
+  - koopa
+  - pie
+  - block
+  - hand
+  - shell
+  - goomba
+  - question
+  - floor
+  - weakblock
   layers:
   - Default
   - TransparentFX
@@ -13,14 +23,14 @@ TagManager:
   - UI
   - 
   - 
-  - fondo
   - suelo
   - plataforma
+  - fondo
   - personajes
-  - 
-  - 
-  - 
-  - 
+  - koopa
+  - items
+  - enemigos
+  - gift
   - 
   - 
   - 
@@ -41,8 +51,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: items
+    uniqueID: 1359324425
+    locked: 0
   - name: fondo
     uniqueID: 2143523681
+    locked: 0
+  - name: gift
+    uniqueID: 4262351149
     locked: 0
   - name: suelo
     uniqueID: 1345156135
@@ -52,12 +68,6 @@ TagManager:
     locked: 0
   - name: personajes
     uniqueID: 2986575573
-    locked: 0
-  - name: 
-    uniqueID: 1359324425
-    locked: 0
-  - name: 
-    uniqueID: 4262351149
     locked: 0
   - name: 
     uniqueID: 2005044017

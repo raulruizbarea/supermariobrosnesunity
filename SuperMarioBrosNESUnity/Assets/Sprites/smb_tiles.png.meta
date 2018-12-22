@@ -2,12 +2,15 @@ fileFormatVersion: 2
 guid: 084ad03edad2c4f088b907bd624ca9b8
 TextureImporter:
   fileIDToRecycleName:
-    21300000: smb_tiles_0
+    21300000: block
     21300002: smb_tiles_1
     21300004: smb_tiles_2
     21300006: smb_tiles_3
     21300008: smb_tiles_4
     21300010: smb_tiles_5
+    21300012: floor_block
+    21300014: no_block
+    21300016: no_destroy
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -90,47 +93,27 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: smb_tiles_0
+      name: block
       rect:
         serializedVersion: 2
-        x: 205
-        y: 69
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e466255d999ee4b7ea4b29cf7b3e7cc7
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: smb_tiles_1
-      rect:
-        serializedVersion: 2
-        x: 193
-        y: 19
-        width: 14
+        x: 85
+        y: 170
+        width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5000001, y: 0.50000006}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 27fd8e0c8f9544972919e9139cfaacdc
+      spriteID: cb13b4d0763974d0483cc763c92ec125
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: smb_tiles_2
+      name: floor_block
       rect:
         serializedVersion: 2
         x: 0
@@ -138,13 +121,53 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4feb13f31d3184d64a84391e9d284a50
+      spriteID: ea986d9bb804b490b8d80a9bdd4f23e7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: no_block
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 136
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7e9c77525e324ae6904cf9f255ee158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: no_destroy
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 170
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 590c35baa12b449f0b4edb6809d9a0b3
       vertices: []
       indices: 
       edges: []
