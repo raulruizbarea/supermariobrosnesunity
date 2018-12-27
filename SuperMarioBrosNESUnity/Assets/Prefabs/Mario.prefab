@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3610850292020534780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.39, z: 0}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3610850292731689808}
@@ -119,7 +119,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1308391723
-  m_SortingLayer: 4
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300012, guid: dc60044f8ca7b43609c9ac9344f54848, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -177,20 +177,34 @@ MonoBehaviour:
     m_Bits: 256
   isFloor: 0
   isCouch: 0
+  noHit: 0
   isDrift: 0
   isRun: 0
+  isMoving: 0
   falldown: 0
   right: 0
   left: 0
-  kick: 300
-  koopa:
-    serializedVersion: 2
-    m_Bits: 4096
-  isKoopa: 0
   Shell: {fileID: 0}
   Mario: {fileID: 3610850292731689821}
   raycast: {fileID: 8529440617624443321}
   raycastLength: 0.4
+  Marios:
+  - {fileID: 9100000, guid: f70dc44e86dbb46838522331a7d45598, type: 2}
+  - {fileID: 9100000, guid: e771d0594f8f14290adb306b53084c80, type: 2}
+  - {fileID: 9100000, guid: 7aa795d413a824b24ba4829efb645147, type: 2}
+  statusMario: 0
+  marioHit: 0
+  allObjects: []
+  koopas: []
+  goombas: []
+  shells: []
+  marioDeath: 0
+  colliderDeath: {fileID: 3610850292731689809}
+  isThrow: 1
+  countBalls: 0
+  fireball: {fileID: 5683148371877107498, guid: 3282faf73fa6340a2b61de6224501870,
+    type: 3}
+  fireballs: []
 --- !u!95 &3610850292731689815
 Animator:
   serializedVersion: 3
@@ -201,7 +215,7 @@ Animator:
   m_GameObject: {fileID: 3610850292731689821}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f70dc44e86dbb46838522331a7d45598, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7aa795d413a824b24ba4829efb645147, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -223,9 +237,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.4}
   serializedVersion: 2
-  m_Radius: 0.39
+  m_Radius: 0.4
 --- !u!1 &8529440617624443321
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +264,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8529440617624443321}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3610850292731689808}

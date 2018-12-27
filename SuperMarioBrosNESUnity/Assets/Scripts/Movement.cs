@@ -52,6 +52,11 @@ public class Movement : MonoBehaviour {
     public bool marioDeath;
     public CircleCollider2D colliderDeath;
 
+    public bool isThrow = true;
+    public int countBalls=0;
+    public GameObject fireball;
+    public GameObject[] fireballs;
+
     void Start () {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -262,6 +267,23 @@ public class Movement : MonoBehaviour {
             changeStatus = false;
             //print(changeStatus);
         }
+
+        if(statusMario == 2)
+        {
+            fireballs = GameObject.FindGameObjectsWithTag("fireball");
+            if(fireballs.Length == 0)
+            {
+                countBalls = 0;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                if (countBalls < 2 && fireballs.Length < 2)
+                {
+                    ThrowBall();
+                }
+            }
+        }
     }
 
     public void UpdateStatus(int newStatus)
@@ -443,5 +465,20 @@ public class Movement : MonoBehaviour {
         rb.velocity = new Vector2(0, 10f);
         rb.isKinematic = false;
         yield return new WaitForSeconds(0.5f);
+    }
+
+    public void ThrowBall()
+    {
+        animator.SetTrigger("throw");
+        if (lookRight)
+        {
+            Instantiate(fireball, new Vector2(transform.position.x + 0.2f, transform.position.y + 1f), Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(fireball, new Vector2(transform.position.x - 0.2f, transform.position.y + 1f), Quaternion.identity);
+        }
+
+        countBalls++;
     }
 }

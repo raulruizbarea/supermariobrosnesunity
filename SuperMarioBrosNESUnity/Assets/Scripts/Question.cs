@@ -127,8 +127,8 @@ public class Question : MonoBehaviour
     {
         //TODO CAMBIAR
         //numeroAleatorio = Random.Range(0, 4);
-        //numeroAleatorio = Random.Range(3, 4);
-        numeroAleatorio = Random.Range(1, 2);
+        numeroAleatorio = Random.Range(3, 4);
+       //numeroAleatorio = Random.Range(1, 2);
         if (haveGift) { 
             Gift = (GameObject)Instantiate(GiftInstance, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.identity);
             hit = true;
@@ -145,5 +145,17 @@ public class Question : MonoBehaviour
         rebote = -1;
         yield return new WaitForSeconds(0.1f);
         rebote = 0;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "mario")
+        {
+            this.gameObject.layer = 8;
+        }
+        else
+        {
+            this.gameObject.layer = 13;
+        }
     }
 }

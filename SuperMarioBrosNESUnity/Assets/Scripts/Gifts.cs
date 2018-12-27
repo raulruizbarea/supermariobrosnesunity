@@ -172,7 +172,10 @@ public class Gifts : MonoBehaviour
             {
                 Destroy(gameObject);
                 //print("mush");
-                mario.UpdateStatus(1);
+                if (mario.GetComponent<Movement>().statusMario == 0)
+                {
+                    mario.UpdateStatus(1);
+                }
             }
             else if (gameObject.name == "lifeup")
             {
