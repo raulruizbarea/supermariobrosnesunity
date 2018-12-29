@@ -54,15 +54,6 @@ public class Shell : MonoBehaviour
                 velocityKoopa *= -1;
             }
 
-            if (hitRight.collider.tag == "koopa" || hitRight.collider.tag == "goomba")
-            {
-                if (rb.velocity.x > 0)
-                {
-                    //Enemigo muere
-                    //Destroy(hitRight.collider.gameObject);
-                }
-            }
-
             if (hitRight.collider.tag == "mario" && Mathf.Abs(velocityKoopa) > 0 && !marioDeath && !noHit && !isKick)
             {
                 if (statusMario != 0)
@@ -90,15 +81,6 @@ public class Shell : MonoBehaviour
             {
                 transform.localScale = new Vector3(transform.localScale.x * -1f, 1f, 1f);
                 velocityKoopa *= -1;
-            }
-
-            if(hitLeft.collider.tag == "koopa" || hitLeft.collider.tag == "goomba")
-            {
-                if(rb.velocity.x > 0)
-                {
-                    //Enemigo muere
-                    //Destroy(hitLeft.collider.gameObject);
-                }
             }
 
             if (hitLeft.collider.tag == "mario" && Mathf.Abs(velocityKoopa) > 0 && !marioDeath && !noHit && !isKick)

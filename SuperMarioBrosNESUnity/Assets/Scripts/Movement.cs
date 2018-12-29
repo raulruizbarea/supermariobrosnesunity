@@ -1,11 +1,13 @@
 ﻿
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour {
-    public float velocityX = 0.08f;
-    public float movementX;
+    public float velocityX = 5f;
+    //public float movementX;
     public float inputX;
+    public float newPosX;
     public bool lookRight;
 
     public float jumpForce = 350f;
@@ -88,6 +90,8 @@ public class Movement : MonoBehaviour {
 
         if(marioDeath && statusMario != 4)
         {
+            SoundSystem.ss.StopMusic();
+            SoundSystem.ss.PlayDeath();
             StartCoroutine(Death());
         }
 
@@ -137,22 +141,30 @@ public class Movement : MonoBehaviour {
 
     void FixedUpdate () {
          inputX = Input.GetAxis("Horizontal");
+       
 
-         if (!isCouch && isMoving && !marioDeath) { 
+         if (!isCouch && isMoving && !marioDeath) {
+            transform.position += new Vector3(inputX * velocityX * Time.deltaTime, 0, 0);
+            //newPosX = Mathf.Clamp(transform.position.x, -7.5f, transform.position.x + 1);
+            //transform.position = new Vector3(newPosX, transform.position.y, 0);
+            newPosX = Mathf.Clamp(rb.transform.position.x, Camera.main.transform.position.x - 7.5f, Camera.main.transform.position.x + 7.5f);//-7.6f, 195f);
+            transform.position = new Vector3(newPosX, rb.transform.position.y, 0);
+
+            if (rb.transform.position.y < -7)
+            {
+                marioDeath = true;
+
+            }
+
+
             if (inputX > 0){
-                movementX = transform.position.x + (inputX * velocityX);
-                transform.position = new Vector3(movementX, transform.position.y, 0);
                 transform.localScale = new Vector3(1, 1, 1);
-                // animator.SetFloat("velocityX", inputX);
                 lookRight = true;
             }
 
             if (inputX < 0)
             {
-                movementX = transform.position.x + (inputX * velocityX);
-                transform.position = new Vector3(movementX, transform.position.y, 0);
                 transform.localScale = new Vector3(-1, 1, 1);
-                //animator.SetFloat("velocityX", Mathf.Abs(inputX));
                 lookRight = false;
             }
         }
@@ -172,10 +184,10 @@ public class Movement : MonoBehaviour {
         {
             animator.SetBool("isFloor", true);
 
-            //if (!isCouch && Input.GetKeyDown(KeyCode.Space))
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
+                SoundSystem.ss.PlayJump();
             }
         }
         else
@@ -244,12 +256,12 @@ public class Movement : MonoBehaviour {
             {
                 isRun = true;
                 animator.SetBool("isRun", true);
-                velocityX = 0.14f;
+                velocityX = 8f;
             }
             else
             {
                 isRun = false;
-                velocityX = 0.08f;
+                velocityX = 5f;
                 animator.SetBool("isRun", false);
             }
         }
@@ -280,6 +292,7 @@ public class Movement : MonoBehaviour {
             {
                 if (countBalls < 2 && fireballs.Length < 2)
                 {
+                    SoundSystem.ss.PlayFireball();
                     ThrowBall();
                 }
             }
@@ -326,6 +339,7 @@ public class Movement : MonoBehaviour {
         }
 
         if(!marioDeath) {
+            SoundSystem.ss.PlayPowerUp();
             if (statusMario == 1)
             {
                 animator.SetBool("superMario", false);
@@ -464,7 +478,16 @@ public class Movement : MonoBehaviour {
         yield return new WaitForSeconds(1f);
         rb.velocity = new Vector2(0, 10f);
         rb.isKinematic = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
+        TitleManager.lifes--;
+        if (TitleManager.lifes == 0)
+        {
+            SceneManager.LoadScene("gameover");
+        }
+        else
+        {
+            SceneManager.LoadScene("level");
+        }
     }
 
     public void ThrowBall()

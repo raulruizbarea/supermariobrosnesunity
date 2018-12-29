@@ -85,14 +85,7 @@ public class Gifts : MonoBehaviour
         {
             idxCoinAnimation = 0;
         }
-        else
-        {
-            //rb.isKinematic = true;
-            if(lifeCoin > 8)
-            {
-                //TODO text 200
-            }
-        }
+
         lifeCoin++;
 
         if(lifeCoin > 8)
@@ -112,11 +105,7 @@ public class Gifts : MonoBehaviour
         {
             idxFlowerAnimation = 0;
         }
-        else
-        {
-            //TODO text 200
-        
-        }
+
     }
 
     void PowerUps()

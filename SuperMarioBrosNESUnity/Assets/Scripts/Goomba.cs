@@ -27,6 +27,14 @@ public class Goomba : MonoBehaviour
     bool marioDeath;
     bool noHit;
 
+    GameManager gm;
+
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,7 +77,6 @@ public class Goomba : MonoBehaviour
                 {
                     StartCoroutine(NoHit());
                     mario.GetComponent<Movement>().marioHit = true;
-                    //gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
                 }
                 else
                 {
@@ -107,7 +114,6 @@ public class Goomba : MonoBehaviour
                 {
                     StartCoroutine(NoHit());
                     mario.GetComponent<Movement>().marioHit = true;
-                    //gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
                 }
                 else
                 {
@@ -125,6 +131,8 @@ public class Goomba : MonoBehaviour
         {
             if (hitHead.collider.tag == "mario" && !pisada)
             {
+                gm.UpdatePoints(100);
+                SoundSystem.ss.PlayGoomba();
                 pisada = true;
                 StartCoroutine(Death());
             }
@@ -157,8 +165,10 @@ public class Goomba : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(velocityX, rb.velocity.y);
-        animator.SetFloat("velocityX", Mathf.Abs(velocityX));
+        if (!pisada) { 
+            rb.velocity = new Vector2(velocityX, rb.velocity.y);
+            animator.SetFloat("velocityX", Mathf.Abs(velocityX));
+        }
     }
 
     public void Pause()

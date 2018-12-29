@@ -61,6 +61,7 @@ GameObject:
   - component: {fileID: 3610850292731689814}
   - component: {fileID: 3610850292731689815}
   - component: {fileID: 3610850292731689809}
+  - component: {fileID: 1077264024411988177}
   m_Layer: 11
   m_Name: Mario
   m_TagString: mario
@@ -166,8 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocityX: 0.1
-  movementX: 0
   inputX: 0
+  newPosX: 0
   lookRight: 0
   jumpForce: 750
   pie: {fileID: 3610850292020534781}
@@ -215,7 +216,7 @@ Animator:
   m_GameObject: {fileID: 3610850292731689821}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7aa795d413a824b24ba4829efb645147, type: 2}
+  m_Controller: {fileID: 9100000, guid: e771d0594f8f14290adb306b53084c80, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -240,6 +241,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.4}
   serializedVersion: 2
   m_Radius: 0.4
+--- !u!114 &1077264024411988177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3610850292731689821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98f45c1e3a4f34ac3bc6a45ed97624bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8529440617624443321
 GameObject:
   m_ObjectHideFlags: 0

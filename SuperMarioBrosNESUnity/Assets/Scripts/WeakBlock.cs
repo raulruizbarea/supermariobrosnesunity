@@ -25,6 +25,12 @@ public class WeakBlock : MonoBehaviour
     public int rebote;
     Vector2 initialPosition;
 
+    GameManager gm;
+
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -63,10 +69,13 @@ public class WeakBlock : MonoBehaviour
             {
                 if (statusMario == 0)
                 {
+                    SoundSystem.ss.PlayBump();
                     StartCoroutine(Rebote());
                 }
                 else
                 {
+                    SoundSystem.ss.PlayBlockBreak();
+                    gm.UpdatePoints(100);
                     Destroy(gameObject);
                 }
             }
@@ -78,10 +87,13 @@ public class WeakBlock : MonoBehaviour
             {
                 if (statusMario == 0)
                 {
+                    SoundSystem.ss.PlayBump();
                     StartCoroutine(Rebote());
                 }
                 else
                 {
+                    SoundSystem.ss.PlayBlockBreak();
+                    gm.UpdatePoints(100);
                     Destroy(gameObject);
                 }
             }
@@ -93,10 +105,13 @@ public class WeakBlock : MonoBehaviour
             {
                 if (statusMario == 0)
                 {
+                    SoundSystem.ss.PlayBump();
                     StartCoroutine(Rebote());
                 }
                 else
                 {
+                    SoundSystem.ss.PlayBlockBreak();
+                    gm.UpdatePoints(100);
                     Destroy(gameObject);
                 }
             }

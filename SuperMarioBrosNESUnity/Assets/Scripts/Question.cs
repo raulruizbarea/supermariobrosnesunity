@@ -33,6 +33,13 @@ public class Question : MonoBehaviour
     int statusMario;
     Vector2 initialPosition;
 
+    GameManager gm;
+
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,7 +83,8 @@ public class Question : MonoBehaviour
         {
             if(hitHead.collider.gameObject == Mario && statusMario != 4)
             {
-                if(!hit)
+                SoundSystem.ss.PlayBump();
+                if (!hit)
                 {
                     StartCoroutine(Rebote());
                     GenerateGift();
@@ -88,6 +96,7 @@ public class Question : MonoBehaviour
         {
             if (hitLeft.collider.gameObject == Mario && statusMario != 4)
             {
+                SoundSystem.ss.PlayBump();
                 if (!hit)
                 {
                     StartCoroutine(Rebote());
@@ -98,6 +107,7 @@ public class Question : MonoBehaviour
 
         if (hitRight.collider != null)
         {
+            SoundSystem.ss.PlayBump();
             if (hitRight.collider.gameObject == Mario && statusMario != 4)
             {
                 if (!hit)
@@ -127,8 +137,23 @@ public class Question : MonoBehaviour
     {
         //TODO CAMBIAR
         //numeroAleatorio = Random.Range(0, 4);
-        numeroAleatorio = Random.Range(3, 4);
+       //numeroAleatorio = Random.Range(3, 4);
        //numeroAleatorio = Random.Range(1, 2);
+        if(numeroAleatorio == 0)
+        {
+            SoundSystem.ss.PlayCoin();
+            gm.UpdatePoints(200);
+            gm.UpdateCoins();
+        } else if (numeroAleatorio == 3 && statusMario == 0)
+        {
+            numeroAleatorio = 1;
+        }
+
+        if (numeroAleatorio != 0)
+        {
+            SoundSystem.ss.PlayMushroom();
+        }
+
         if (haveGift) { 
             Gift = (GameObject)Instantiate(GiftInstance, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.identity);
             hit = true;

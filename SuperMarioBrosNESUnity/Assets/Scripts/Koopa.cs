@@ -30,6 +30,14 @@ public class Koopa : MonoBehaviour
 
     bool noHit;
 
+    GameManager gm;
+
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -115,6 +123,7 @@ public class Koopa : MonoBehaviour
         {
             if (hitHead.collider.gameObject == Mario)
             {
+                gm.UpdatePoints(100);
                 animator.SetBool("pisada", pisada);
                 Instantiate(Shell, this.gameObject.transform.position, this.gameObject.transform.rotation);
                 Destroy(this.gameObject);
