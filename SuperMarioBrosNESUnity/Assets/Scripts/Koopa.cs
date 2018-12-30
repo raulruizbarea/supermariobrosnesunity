@@ -6,9 +6,11 @@ public class Koopa : MonoBehaviour
 {
     public GameObject Mario;
     public GameObject Shell;
-    public float velocityX = 0.5f;
+    public float velocityX = 0f;
     public bool lookRight = false;
     public bool pisada = false;
+
+    private bool oneTime;
 
     public GameObject raycast;
     public GameObject raycastHead;
@@ -44,6 +46,7 @@ public class Koopa : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         Mario = GameObject.FindGameObjectWithTag("mario");
+        oneTime = false;
     }
 
     private void Update()
@@ -132,6 +135,12 @@ public class Koopa : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!oneTime && (this.transform.position.x - Mario.transform.position.x) < 8)
+        {
+            velocityX = -1f;
+            oneTime = true;
+        }
+
         rb.velocity = new Vector2(velocityX, rb.velocity.y);
         animator.SetFloat("velocityX", Mathf.Abs(velocityX));
     }

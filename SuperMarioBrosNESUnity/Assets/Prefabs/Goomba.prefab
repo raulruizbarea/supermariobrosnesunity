@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b6175ed87534677b22e23e88714177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityX: -0.5
+  velocityX: 0
   pisada: 0
   raycast: {fileID: 30857777}
   raycastHead: {fileID: 1582668199}

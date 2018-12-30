@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Goomba : MonoBehaviour
 {
-    public float velocityX = 0.5f;
+    public float velocityX = 0;
+    //public float velocityX = 0.5f;
     public bool pisada = false;
 
     public GameObject raycast;
@@ -15,6 +16,8 @@ public class Goomba : MonoBehaviour
     private Vector3 endRaycastRight;
     private Vector3 startRaycastHead;
     private Vector3 endRaycastHead;
+
+    private bool oneTime;
 
     public float raycastLength;
     public float raycastLengthHead;
@@ -39,6 +42,7 @@ public class Goomba : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         mario = GameObject.FindGameObjectWithTag("mario");
+        oneTime = false;
     }
 
     void Update()
@@ -167,6 +171,12 @@ public class Goomba : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!oneTime && (this.transform.position.x - mario.transform.position.x) < 8)
+        {
+            velocityX = -0.5f;
+            oneTime = true;
+        }
+
         if (!pisada) { 
             rb.velocity = new Vector2(velocityX, rb.velocity.y);
             animator.SetFloat("velocityX", Mathf.Abs(velocityX));

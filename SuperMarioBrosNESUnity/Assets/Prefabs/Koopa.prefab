@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Mario: {fileID: 0}
   Shell: {fileID: 2033930591, guid: 2dcfa0d43dc214eac8098f409f4d2ee2, type: 3}
-  velocityX: -1
+  velocityX: 0
   lookRight: 0
   pisada: 0
   raycast: {fileID: 7771386937335764179}
