@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,13 @@ public class GameManager : MonoBehaviour
     public Text timeText;
     public Text coinsText;
     public Text pointsText;
+    public Text debugText;
 
+    public GameObject debug;
+    public GameObject debugPanel;
     public GameObject pause;
     bool isPause = false;
+    bool isDebug = false;
 
     float time = 400f;
 
@@ -23,21 +28,21 @@ public class GameManager : MonoBehaviour
         pointsText.text = TitleManager.points.ToString().PadLeft(6, '0');
         coinsText.text = TitleManager.coins.ToString().PadLeft(2, '0');
         pause.SetActive(isPause);
+        debug.SetActive(isPause);
+        debugPanel.SetActive(isPause);
         SoundSystem.ss.PlayMusic();
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if (time > 0)
         {
-            time -= Time.deltaTime;
-            timeText.text = time.ToString("f0");
+            if(!mario.GetComponent<Movement>().isFlag) { 
+                time -= Time.deltaTime;
+                timeText.text = time.ToString("f0");
+            }
         }
-
-        if (time <= 0f)
-        {
+        else {
             mario.GetComponent<Movement>().marioDeath = true;
         }
 
@@ -45,6 +50,20 @@ public class GameManager : MonoBehaviour
         {
             SoundSystem.ss.PlayPause();
             Pause();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && isPause)
+        {
+            isDebug = !isDebug;
+            if(isDebug)
+            {
+                debug.GetComponent<Text>().text = "DEBUG ON";
+            }
+            else
+            {
+                debug.GetComponent<Text>().text = "DEBUG OFF";
+            }
+            debugPanel.SetActive(isDebug);
         }
 
         if (isPause)
@@ -55,6 +74,11 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1f;
         }
+    }
+
+    public void UpdateDebug(string text)
+    {
+        debugText.text = text + "\n" + debugText.text;
     }
 
     public void UpdateLifes()
@@ -88,5 +112,6 @@ public class GameManager : MonoBehaviour
     {
         isPause = !isPause;
         pause.SetActive(isPause);
+        debug.SetActive(isPause);
     }
 }

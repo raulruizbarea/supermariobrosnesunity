@@ -29,7 +29,7 @@ public class GameoverManager : MonoBehaviour
 
     public IEnumerator Redirect()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(7f);
         SceneManager.LoadScene("title");
     }
 }

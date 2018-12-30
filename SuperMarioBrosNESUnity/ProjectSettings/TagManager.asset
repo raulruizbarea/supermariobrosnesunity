@@ -15,6 +15,7 @@ TagManager:
   - floor
   - weakblock
   - fireball
+  - flag
   layers:
   - Default
   - TransparentFX

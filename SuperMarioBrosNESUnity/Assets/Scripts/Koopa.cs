@@ -73,7 +73,6 @@ public class Koopa : MonoBehaviour
                 {
                     StartCoroutine(NoHit());
                     Mario.GetComponent<Movement>().marioHit = true;
-                    //gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
                 }
                 else
                 {
@@ -93,7 +92,6 @@ public class Koopa : MonoBehaviour
         {
             if (hitLeft.collider.tag != "mario")
             {
-                //print(hitLeft.collider.tag);
                 lookRight = !lookRight;
                 transform.localScale = new Vector3(transform.localScale.x * -1f, 1f, 1f);
                 velocityX *= -1;

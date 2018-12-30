@@ -10,6 +10,13 @@ public class Fireball : MonoBehaviour
 
     float velocity;
 
+    GameManager gm;
+
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
+
     void Start()
     {
         mario = GameObject.FindGameObjectWithTag("mario").GetComponent<Movement>();
@@ -17,11 +24,11 @@ public class Fireball : MonoBehaviour
 
         if (mario.lookRight)
         {
-            velocity = 4.5f;
+            velocity = 8f;
         }
         else
         {
-            velocity = -4.5f;
+            velocity = -8f;
         }
 
         rb.velocity = new Vector2(velocity, 0);
@@ -33,23 +40,37 @@ public class Fireball : MonoBehaviour
         {
             if(collision.collider.tag != "mario")
             {
-                try { 
+                try {
                     Destroy(gameObject);
                     mario.countBalls--;
                 } catch (NullReferenceException ex)
                 {
-                    if(mario.countBalls > 0)
-                    {
-                        mario.countBalls--;
+                    if(mario != null) { 
+                        if (mario.countBalls > 0)
+                        {
+                            mario.countBalls--;
+                        }
                     }
                     print("No fireballs");
                 }
             }
         }
 
+        if(collision.collider.tag == "block" || collision.collider.tag == "weakblock" || collision.collider.tag == "question")
+        {
+            SoundSystem.ss.PlayBump();
+        }
+
         if (collision.collider.tag == "koopa" || collision.collider.tag == "shell" || collision.collider.tag == "goomba")
         {
-            Destroy(collision.gameObject);
+            SoundSystem.ss.PlayKick();
+            if (collision.collider.tag == "goomba")
+            {
+                gm.UpdateDebug("Fireball kills Goomba");
+                StartCoroutine(collision.collider.gameObject.GetComponent<Goomba>().DeathByShell());
+            } else { 
+                Destroy(collision.gameObject);
+            }
         }
     }
 }

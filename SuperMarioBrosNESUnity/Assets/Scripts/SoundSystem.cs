@@ -20,6 +20,7 @@ public class SoundSystem : MonoBehaviour
     public AudioSource audioGameover;
     public AudioSource audioWorldclear;
     public AudioSource audioStageclear;
+    public AudioSource audioKick;
 
     void Awake()
     {
@@ -45,6 +46,11 @@ public class SoundSystem : MonoBehaviour
     public void PlayGameover()
     {
         audioGameover.Play();
+    }
+
+    public void PlayKick()
+    {
+        audioKick.Play();
     }
 
     public void PlayWorldclear()

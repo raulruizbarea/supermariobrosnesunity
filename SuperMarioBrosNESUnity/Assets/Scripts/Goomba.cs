@@ -34,8 +34,6 @@ public class Goomba : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -43,7 +41,6 @@ public class Goomba : MonoBehaviour
         mario = GameObject.FindGameObjectWithTag("mario");
     }
 
-    // Update is called once per frame
     void Update()
     {
         statusMario = mario.GetComponent<Movement>().statusMario;
@@ -55,13 +52,14 @@ public class Goomba : MonoBehaviour
         RaycastHit2D hitRight = Physics2D.Linecast(startRaycastRight, endRaycastRight);
         Debug.DrawLine(startRaycastRight, endRaycastRight, Color.red);
 
-        //print(noHit);
         if (hitRight.collider != null)
         {
             if (hitRight.collider.tag != "mario")
             {
                 if (hitRight.collider.tag == "shell" && Mathf.Abs(hitRight.collider.gameObject.GetComponent<Rigidbody2D>().velocity.x) > 0)
                 {
+                    gm.UpdateDebug("Goomba death by shell");
+                    SoundSystem.ss.PlayKick();
                     StartCoroutine(DeathByShell());
                 }
                 else
@@ -75,11 +73,13 @@ public class Goomba : MonoBehaviour
             {
                 if(statusMario != 0)
                 {
+                    gm.UpdateDebug("Goomba hits Mario");
                     StartCoroutine(NoHit());
                     mario.GetComponent<Movement>().marioHit = true;
                 }
                 else
                 {
+                    gm.UpdateDebug("Goomba kills Mario");
                     mario.GetComponent<Movement>().marioDeath = true;
                 }
 
@@ -99,6 +99,8 @@ public class Goomba : MonoBehaviour
             {
                 if (hitLeft.collider.tag == "shell" && Mathf.Abs(hitLeft.collider.gameObject.GetComponent<Rigidbody2D>().velocity.x) > 0)
                 {
+                    gm.UpdateDebug("Goomba death by shell");
+                    SoundSystem.ss.PlayKick();
                     StartCoroutine(DeathByShell());
                 }
                 else
@@ -112,11 +114,13 @@ public class Goomba : MonoBehaviour
             {
                 if (statusMario != 0)
                 {
+                    gm.UpdateDebug("Goomba hits Mario");
                     StartCoroutine(NoHit());
                     mario.GetComponent<Movement>().marioHit = true;
                 }
                 else
                 {
+                    gm.UpdateDebug("Goomba kills Mario");
                     mario.GetComponent<Movement>().marioDeath = true;
                 }
             }
@@ -131,6 +135,7 @@ public class Goomba : MonoBehaviour
         {
             if (hitHead.collider.tag == "mario" && !pisada)
             {
+                gm.UpdateDebug("Goomba killed by Mario");
                 gm.UpdatePoints(100);
                 SoundSystem.ss.PlayGoomba();
                 pisada = true;
@@ -141,25 +146,22 @@ public class Goomba : MonoBehaviour
 
     public IEnumerator DeathByShell()
     {
+        pisada = true;
         velocityX = 0;
         rb.velocity = new Vector2(0, 4f);
         transform.localScale = new Vector3(transform.localScale.x, -1f, 1f);
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        // gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 
     public IEnumerator Death()
     {
-        //velocityX = 0;
-        //rb.velocity = Vector2.zero;
+
         pisada = true;
         animator.SetBool("pisada", true);
         GetComponent<CircleCollider2D>().radius = 0.1f;
-        //GetComponent<CircleCollider2D>().isTrigger = true;
         yield return new WaitForSeconds(2f);
-        //rb.constraints = RigidbodyConstraints2D.FreezeAll;
         Destroy(gameObject);
     }
 

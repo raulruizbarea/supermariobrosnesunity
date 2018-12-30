@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeakBlock : MonoBehaviour
+public class WeakBlockCoins : MonoBehaviour
 {
     Animator animator;
     Rigidbody2D rb;
@@ -20,12 +21,18 @@ public class WeakBlock : MonoBehaviour
     Vector3 startRaycastRight;
     Vector3 endRaycastRight;
 
+    GameManager gm;
+
     int statusMario;
     public GameObject Mario;
     public int rebote;
     Vector2 initialPosition;
 
-    GameManager gm;
+    GameObject Gift;
+    public GameObject GiftInstance;
+    public Gifts giftCode;
+
+    int count;
 
     void Awake()
     {
@@ -35,9 +42,12 @@ public class WeakBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         Mario = GameObject.FindGameObjectWithTag("mario");
         initialPosition = gameObject.transform.position;
+        hit = false;
+        count = 0;
     }
 
     // Update is called once per frame
@@ -63,64 +73,30 @@ public class WeakBlock : MonoBehaviour
         RaycastHit2D hitHead = Physics2D.Linecast(startRaycastCenter, endRaycastCenter);
         Debug.DrawLine(startRaycastCenter, endRaycastCenter, Color.grey);
 
-        if (hitHead.collider != null)
+        if (hitHead.collider != null || hitLeft.collider != null || hitHead.collider != null)
         {
-            if (hitHead.collider.gameObject == Mario && statusMario != 4)
-            {
-                if (statusMario == 0)
+            try { 
+                if (hitHead.collider.gameObject == Mario || hitLeft.collider.gameObject == Mario || hitRight.collider.gameObject == Mario
+                && statusMario != 4)
                 {
-                    gm.UpdateDebug("Block hit by Mario");
                     SoundSystem.ss.PlayBump();
-                    StartCoroutine(Rebote());
+                    if (!hit && count < 8)
+                    {
+                        StartCoroutine(Rebote());
+                        StartCoroutine(NoHit());
+                        GenerateCoin();
+                        count++;
+                    }
                 }
-                else
-                {
-                    gm.UpdateDebug("Block broke by Mario");
-                    SoundSystem.ss.PlayBlockBreak();
-                    gm.UpdatePoints(100);
-                    Destroy(gameObject);
-                }
+            } catch (Exception e)
+            {
+                print("One hit delay");
             }
         }
 
-        if (hitLeft.collider != null)
+        if(count == 8)
         {
-            if (hitLeft.collider.gameObject == Mario && statusMario != 4)
-            {
-                if (statusMario == 0)
-                {
-                    gm.UpdateDebug("Block hit by Mario");
-                    SoundSystem.ss.PlayBump();
-                    StartCoroutine(Rebote());
-                }
-                else
-                {
-                    gm.UpdateDebug("Block broke by Mario");
-                    SoundSystem.ss.PlayBlockBreak();
-                    gm.UpdatePoints(100);
-                    Destroy(gameObject);
-                }
-            }
-        }
-
-        if (hitRight.collider != null)
-        {
-            if (hitRight.collider.gameObject == Mario && statusMario != 4)
-            {
-                if (statusMario == 0)
-                {
-                    gm.UpdateDebug("Block hit by Mario");
-                    SoundSystem.ss.PlayBump();
-                    StartCoroutine(Rebote());
-                }
-                else
-                {
-                    gm.UpdateDebug("Block broke by Mario");
-                    SoundSystem.ss.PlayBlockBreak();
-                    gm.UpdatePoints(100);
-                    Destroy(gameObject);
-                }
-            }
+            animator.SetBool("hit", true);
         }
 
         if (rebote == 1)
@@ -133,6 +109,24 @@ public class WeakBlock : MonoBehaviour
             transform.Translate(Vector3.down * 2 * Time.deltaTime);
             gameObject.transform.position = initialPosition;
         }
+    }
+
+    void GenerateCoin()
+    {
+        SoundSystem.ss.PlayCoin();
+        gm.UpdatePoints(200);
+        gm.UpdateCoins();
+        gm.UpdateDebug("Mario gain coin");
+        Gift = (GameObject)Instantiate(GiftInstance, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), Quaternion.identity);
+        giftCode = Gift.GetComponent<Gifts>();
+        giftCode.gift = 0;
+    }
+
+    public IEnumerator NoHit()
+    {
+        hit = true;
+        yield return new WaitForSeconds(0.5f);
+        hit = false;
     }
 
     public IEnumerator Rebote()

@@ -86,6 +86,7 @@ public class Question : MonoBehaviour
                 SoundSystem.ss.PlayBump();
                 if (!hit)
                 {
+                    gm.UpdateDebug("Question hit by Mario");
                     StartCoroutine(Rebote());
                     GenerateGift();
                 }
@@ -99,6 +100,7 @@ public class Question : MonoBehaviour
                 SoundSystem.ss.PlayBump();
                 if (!hit)
                 {
+                    gm.UpdateDebug("Question hit by Mario");
                     StartCoroutine(Rebote());
                     GenerateGift();
                 }
@@ -107,11 +109,12 @@ public class Question : MonoBehaviour
 
         if (hitRight.collider != null)
         {
-            SoundSystem.ss.PlayBump();
             if (hitRight.collider.gameObject == Mario && statusMario != 4)
             {
+                SoundSystem.ss.PlayBump();
                 if (!hit)
                 {
+                    gm.UpdateDebug("Question hit by Mario");
                     StartCoroutine(Rebote());
                     GenerateGift();
                 }
@@ -137,15 +140,17 @@ public class Question : MonoBehaviour
     {
         //TODO CAMBIAR
         //numeroAleatorio = Random.Range(0, 4);
-       //numeroAleatorio = Random.Range(3, 4);
-       //numeroAleatorio = Random.Range(1, 2);
+        //numeroAleatorio = Random.Range(3, 4);
+        //numeroAleatorio = Random.Range(1, 2);
         if(numeroAleatorio == 0)
         {
+            gm.UpdateDebug("Mario gain coin");
             SoundSystem.ss.PlayCoin();
             gm.UpdatePoints(200);
             gm.UpdateCoins();
         } else if (numeroAleatorio == 3 && statusMario == 0)
         {
+            gm.UpdateDebug("Mario is small generating Mushroom");
             numeroAleatorio = 1;
         }
 

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +11,7 @@ public class Movement : MonoBehaviour {
     public float newPosX;
     public bool lookRight;
 
-    public float jumpForce = 350f;
+    public float jumpForce = 800f;
 
     public Transform pie;
     public float radioPie = 0.1f;
@@ -24,6 +25,7 @@ public class Movement : MonoBehaviour {
 
     Animator animator;
     Rigidbody2D rb;
+    BoxCollider2D bc;
     public float falldown;
     public int right, left;
 
@@ -52,16 +54,26 @@ public class Movement : MonoBehaviour {
     public GameObject[] shells;
 
     public bool marioDeath;
-    public CircleCollider2D colliderDeath;
+    public BoxCollider2D colliderDeath;
 
     public bool isThrow = true;
     public int countBalls=0;
     public GameObject fireball;
     public GameObject[] fireballs;
 
+    public bool isFlag = false;
+
+    GameManager gm;
+
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
+
     void Start () {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
         isMoving = true;
     }
 
@@ -70,20 +82,31 @@ public class Movement : MonoBehaviour {
         if (statusMario == 0)
         {
             animator.runtimeAnimatorController = Marios[0];
+            bc.size = new Vector2(0.65f, 0.8f);
+            bc.offset = new Vector2(0, 0.4f);
         }
 
         if (statusMario == 1)
         {
             animator.runtimeAnimatorController = Marios[1];
+            if (!isCouch) {
+                bc.size = new Vector2(0.8f, 1.5f);
+                bc.offset = new Vector2(0, 0.8f);
+            }
         }
 
         if (statusMario == 2)
         {
             animator.runtimeAnimatorController = Marios[2];
+            if(!isCouch) {
+                bc.size = new Vector2(0.8f, 1.5f);
+                bc.offset = new Vector2(0, 0.8f);
+            }
         }
 
         if(marioHit)
         {
+            gm.UpdateDebug("Mario hit");
             StartCoroutine(Hit());
             marioHit = false;
         }
@@ -112,6 +135,7 @@ public class Movement : MonoBehaviour {
             {
                 Shell = hitRight.collider.gameObject;
                 if (Shell.GetComponent<Shell>().velocityKoopa == 0) {
+                    gm.UpdateDebug("Mario can't be hit");
                     StartCoroutine(NoHit());
                     Shell.GetComponent<Shell>().velocityKoopa = 4f;
                 }
@@ -132,6 +156,7 @@ public class Movement : MonoBehaviour {
                 Shell = hitLeft.collider.gameObject;
                 if (Shell.GetComponent<Shell>().velocityKoopa == 0)
                 {
+                    gm.UpdateDebug("Mario can't be hit");
                     StartCoroutine(NoHit());
                     Shell.GetComponent<Shell>().velocityKoopa = -4f;
                 }
@@ -141,24 +166,20 @@ public class Movement : MonoBehaviour {
 
     void FixedUpdate () {
          inputX = Input.GetAxis("Horizontal");
-       
 
-         if (!isCouch && isMoving && !marioDeath) {
+         if (!isCouch && isMoving && !marioDeath && !isFlag) {
             transform.position += new Vector3(inputX * velocityX * Time.deltaTime, 0, 0);
-            //newPosX = Mathf.Clamp(transform.position.x, -7.5f, transform.position.x + 1);
-            //transform.position = new Vector3(newPosX, transform.position.y, 0);
             newPosX = Mathf.Clamp(rb.transform.position.x, Camera.main.transform.position.x - 7.5f, Camera.main.transform.position.x + 7.5f);//-7.6f, 195f);
             transform.position = new Vector3(newPosX, rb.transform.position.y, 0);
 
             if (rb.transform.position.y < -7)
             {
+                gm.UpdateDebug("Mario death by hole");
                 marioDeath = true;
-
             }
 
-
             if (inputX > 0){
-                transform.localScale = new Vector3(1, 1, 1);
+                 transform.localScale = new Vector3(1, 1, 1);
                 lookRight = true;
             }
 
@@ -186,6 +207,7 @@ public class Movement : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                gm.UpdateDebug("Mario jump");
                 GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
                 SoundSystem.ss.PlayJump();
             }
@@ -197,6 +219,8 @@ public class Movement : MonoBehaviour {
 
         if (isFloor && Input.GetKey(KeyCode.DownArrow) && statusMario != 0)
         {
+            bc.size = new Vector2(0.8f, 1.2f);
+            bc.offset = new Vector2(0, 0.6f);
             isCouch = true;
             animator.SetBool("isCouch", true);
         }
@@ -277,7 +301,6 @@ public class Movement : MonoBehaviour {
             StartCoroutine(Pause());
             isMoving = false;
             changeStatus = false;
-            //print(changeStatus);
         }
 
         if(statusMario == 2)
@@ -292,6 +315,7 @@ public class Movement : MonoBehaviour {
             {
                 if (countBalls < 2 && fireballs.Length < 2)
                 {
+                    gm.UpdateDebug("Mario throw fireball");
                     SoundSystem.ss.PlayFireball();
                     ThrowBall();
                 }
@@ -310,7 +334,6 @@ public class Movement : MonoBehaviour {
         Vector2 velAntes = rb.velocity;
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        //rb.isKinematic = true;
 
         for (int i = 0; i < allObjects.Length; i++)
         {
@@ -342,10 +365,12 @@ public class Movement : MonoBehaviour {
             SoundSystem.ss.PlayPowerUp();
             if (statusMario == 1)
             {
+                gm.UpdateDebug("SUPER MARIO!");
                 animator.SetBool("superMario", false);
             }
             else if(statusMario == 2)
             {
+                gm.UpdateDebug("FIRE MARIO!");
                 animator.SetBool("fireMario", false);
             }
 
@@ -495,13 +520,46 @@ public class Movement : MonoBehaviour {
         animator.SetTrigger("throw");
         if (lookRight)
         {
-            Instantiate(fireball, new Vector2(transform.position.x + 0.2f, transform.position.y + 1f), Quaternion.identity);
+            GameObject fire = Instantiate(fireball, new Vector2(transform.position.x + 0.5f, transform.position.y + 1f), Quaternion.identity);
+            try
+            {
+                Destroy(fire, 2);
+            } catch (Exception e)
+            {
+                print("Fireball destroyed");
+            }
         }
         else
         {
-            Instantiate(fireball, new Vector2(transform.position.x - 0.2f, transform.position.y + 1f), Quaternion.identity);
+            GameObject fire = Instantiate(fireball, new Vector2(transform.position.x - 0.5f, transform.position.y + 1f), Quaternion.identity);
+            try
+            {
+                Destroy(fire, 2);
+            }
+            catch (Exception e)
+            {
+                print("Fireball destroyed");
+            }
         }
 
         countBalls++;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.transform.tag == "flag")
+        {
+            animator.SetBool("isFlag", true);
+            gm.UpdatePoints(400);
+            isFlag = true;
+            collision.transform.SendMessage("AnimateFlag");
+            StartCoroutine(Redirect());
+        }
+    }
+
+    public IEnumerator Redirect()
+    {
+        yield return new WaitForSeconds(6f);
+        SceneManager.LoadScene("gameover");
     }
 }

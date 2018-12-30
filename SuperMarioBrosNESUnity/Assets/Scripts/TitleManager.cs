@@ -16,6 +16,9 @@ public class TitleManager : MonoBehaviour
 
     void Start()
     {
+        lifes = 3;
+        coins = 0;
+        points = 0;
         isGame = true;
         axeGame.SetActive(isGame);
         axeExit.SetActive(!isGame);
