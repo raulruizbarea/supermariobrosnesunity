@@ -84,7 +84,6 @@ public class GameManager : MonoBehaviour
     public void UpdateLifes()
     {
         TitleManager.lifes += 1;
-        lifesText.text = TitleManager.lifes.ToString();
     }
 
     public void UpdateCoins()
