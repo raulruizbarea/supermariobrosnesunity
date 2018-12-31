@@ -40,6 +40,7 @@ public class Gifts : MonoBehaviour
         colliderGift = GetComponent<Collider2D>();
         mario = GameObject.FindGameObjectWithTag("mario").GetComponent<Movement>();
 
+        // Set the name, sprite, and effect depending on what gift is coin mushroom lifeup or flower
         switch(gift)
         {
             case 0:
@@ -70,12 +71,13 @@ public class Gifts : MonoBehaviour
     void Coin()
     {
         colliderGift.isTrigger = true;
-        //rb.gravityScale = 0;
+        // Apply velocity on y to make the effect of going up
         rb.velocity = new Vector2(0, 5f);
     }
 
     void AnimationCoin()
     {
+        // Repeat the animation of moving the coin
         if (idxCoinAnimation < coinAnimation.Length -1 && lifeCoin > 8)
         {
             sprite.sprite = coinAnimation[idxCoinAnimation];
@@ -88,6 +90,7 @@ public class Gifts : MonoBehaviour
 
         lifeCoin++;
 
+        // Destroy coin after the time pass
         if(lifeCoin > 8)
         {
             Destroy(gameObject);
@@ -96,6 +99,7 @@ public class Gifts : MonoBehaviour
 
     void AnimationFlower()
     {
+        // Same as coin
         if (idxFlowerAnimation < flowerAnimation.Length - 1)
         {
             sprite.sprite = flowerAnimation[idxFlowerAnimation];
@@ -105,19 +109,20 @@ public class Gifts : MonoBehaviour
         {
             idxFlowerAnimation = 0;
         }
-
     }
 
     void PowerUps()
     {
         colliderGift.isTrigger = true;
+        // Apply gravity to make stop
         rb.gravityScale = 0;
+        // Velocity to stay nearby the block
         rb.velocity = new Vector2(0, 0.7f);
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Raycast for change direction
         startRaycastRight = raycast.transform.position;
         endRaycastRight = new Vector3(raycast.transform.position.x + raycastLength, raycast.transform.position.y, 0);
 
@@ -132,6 +137,7 @@ public class Gifts : MonoBehaviour
             }
         }
 
+        // Raycast for change direction
         startRaycastLeft = raycast.transform.position;
         endRaycastLeft = new Vector3(raycast.transform.position.x - raycastLength, raycast.transform.position.y, 0);
 
@@ -150,17 +156,21 @@ public class Gifts : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Velocity continuos
         rb.velocity = new Vector2(velocityGift, rb.velocity.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // If its mario
         if(collision.gameObject.tag == "mario")
         {
+            // If its a mushroom
             if(gameObject.name == "mushroom")
             {
+                // Destroy the mushroom
                 Destroy(gameObject);
-                //print("mush");
+                // If its small mario now is SUPERMARIO!
                 if (mario.GetComponent<Movement>().statusMario == 0)
                 {
                     mario.UpdateStatus(1);
@@ -168,14 +178,14 @@ public class Gifts : MonoBehaviour
             }
             else if (gameObject.name == "lifeup")
             {
+                // Destroy the lifeup
                 Destroy(gameObject);
-                print("lifeup");
             }
-
             else if (gameObject.name == "flower")
             {
+                // Destroy the flower
                 Destroy(gameObject);
-                //print("flower");
+                // If its super mario now is FIREMARIO!
                 mario.UpdateStatus(2);
             }
         }
@@ -183,8 +193,10 @@ public class Gifts : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        // If its mushroom or lifeup
         if(gift == 1 || gift == 2)
         {
+            // Random direction
             direction = Random.Range(0, 2);
             if (direction == 0)
             {
@@ -196,12 +208,14 @@ public class Gifts : MonoBehaviour
             }
             rb.velocity = new Vector2(velocityGift, 0);
         }
+        // Set gravity
         rb.gravityScale = 1;
         colliderGift.isTrigger = false;
     }
 
     void ChangeDirection()
     {
+        // Inverse velocity
         velocityGift *= -1;
     }
 }

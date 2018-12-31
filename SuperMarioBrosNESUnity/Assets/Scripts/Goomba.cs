@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Goomba : MonoBehaviour
 {
+    // Velocity starts 0 only start moving when Mario is on range
     public float velocityX = 0;
-    //public float velocityX = 0.5f;
-    public bool pisada = false;
+    public bool hit = false;
 
     public GameObject raycast;
     public GameObject raycastHead;
@@ -73,7 +73,7 @@ public class Goomba : MonoBehaviour
                 }
             }
 
-            if(hitRight.collider.tag == "mario" && !pisada && !marioDeath && !noHit)
+            if(hitRight.collider.tag == "mario" && !hit && !marioDeath && !noHit)
             {
                 if(statusMario != 0)
                 {
@@ -114,7 +114,7 @@ public class Goomba : MonoBehaviour
                 }
             }
 
-            if (hitLeft.collider.tag == "mario" && !pisada && !marioDeath && !noHit)
+            if (hitLeft.collider.tag == "mario" && !hit && !marioDeath && !noHit)
             {
                 if (statusMario != 0)
                 {
@@ -137,33 +137,39 @@ public class Goomba : MonoBehaviour
         Debug.DrawLine(startRaycastHead, endRaycastHead, Color.red);
         if (hitHead.collider != null)
         {
-            if (hitHead.collider.tag == "mario" && !pisada)
+            if (hitHead.collider.tag == "mario" && !hit)
             {
                 gm.UpdateDebug("Goomba killed by Mario");
                 gm.UpdatePoints(100);
                 SoundSystem.ss.PlayGoomba();
-                pisada = true;
+                hit = true;
                 StartCoroutine(Death());
             }
         }
     }
 
+    // If its hit by shell
     public IEnumerator DeathByShell()
     {
-        pisada = true;
+        hit = true;
+        // Stop the goomba
         velocityX = 0;
+        // Move up
         rb.velocity = new Vector2(0, 4f);
+        // Reverse
         transform.localScale = new Vector3(transform.localScale.x, -1f, 1f);
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        // Wait and destroy
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 
+    // If goomba dies
     public IEnumerator Death()
     {
-
-        pisada = true;
+        hit = true;
         animator.SetBool("pisada", true);
+        // Avoid mario collider wait and destroy
         GetComponent<CircleCollider2D>().radius = 0.1f;
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
@@ -171,13 +177,15 @@ public class Goomba : MonoBehaviour
 
     void FixedUpdate()
     {
+        // After see mario one time, starts moving left
         if (!oneTime && (this.transform.position.x - mario.transform.position.x) < 8)
         {
             velocityX = -0.5f;
             oneTime = true;
         }
 
-        if (!pisada) { 
+        // If its not hit continues moving
+        if (!hit) { 
             rb.velocity = new Vector2(velocityX, rb.velocity.y);
             animator.SetFloat("velocityX", Mathf.Abs(velocityX));
         }
@@ -185,18 +193,21 @@ public class Goomba : MonoBehaviour
 
     public void Pause()
     {
+        // Freeze it
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         animator.SetBool("pause", true);
     }
 
     public void Resume()
     {
+        // Unfreeze
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         animator.SetBool("pause", false);
     }
 
     public IEnumerator NoHit()
     {
+        // Dont hit mario if mario was hit
         noHit = true;
         yield return new WaitForSeconds(1f);
         noHit = false;

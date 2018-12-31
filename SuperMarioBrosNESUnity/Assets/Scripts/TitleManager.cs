@@ -16,9 +16,11 @@ public class TitleManager : MonoBehaviour
 
     void Start()
     {
+        // Default values for lifes coins and points
         lifes = 3;
         coins = 0;
         points = 0;
+        // Default value play game
         isGame = true;
         axeGame.SetActive(isGame);
         axeExit.SetActive(!isGame);
@@ -26,6 +28,7 @@ public class TitleManager : MonoBehaviour
 
     void Update()
     {
+        // Move between options play or exit
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             isGame = !isGame;
@@ -34,7 +37,7 @@ public class TitleManager : MonoBehaviour
             axeGame.SetActive(isGame);
             axeExit.SetActive(!isGame);
         }
-
+        // If return or space go to option selected
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
         {
             if(isGame) { 

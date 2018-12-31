@@ -4,25 +4,23 @@ using UnityEngine;
 
 public class WeakBlock : MonoBehaviour
 {
-    Animator animator;
-    Rigidbody2D rb;
+    // If its hit
     public bool hit;
-
+    // To check if its hit by mario
     public GameObject RaycastLeft;
     Vector3 startRaycastLeft;
     Vector3 endRaycastLeft;
-
     public GameObject RaycastCenter;
     Vector3 startRaycastCenter;
     Vector3 endRaycastCenter;
-
     public GameObject RaycastRight;
     Vector3 startRaycastRight;
     Vector3 endRaycastRight;
-
+    // Know status mario to move or destroy it
     int statusMario;
     public GameObject Mario;
-    public int rebote;
+    public int move;
+    // Initial position because had problems with physics
     Vector2 initialPosition;
 
     GameManager gm;
@@ -32,15 +30,13 @@ public class WeakBlock : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         Mario = GameObject.FindGameObjectWithTag("mario");
+        // Save old position
         initialPosition = gameObject.transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
         statusMario = Mario.GetComponent<Movement>().statusMario;
@@ -123,12 +119,12 @@ public class WeakBlock : MonoBehaviour
             }
         }
 
-        if (rebote == 1)
+        if (move == 1)
         {
             transform.Translate(Vector3.up * 2 * Time.deltaTime);
         }
 
-        if (rebote == -1)
+        if (move == -1)
         {
             transform.Translate(Vector3.down * 2 * Time.deltaTime);
             gameObject.transform.position = initialPosition;
@@ -137,11 +133,11 @@ public class WeakBlock : MonoBehaviour
 
     public IEnumerator Rebote()
     {
-        rebote = 1;
+        move = 1;
         yield return new WaitForSeconds(0.1f);
-        rebote = -1;
+        move = -1;
         yield return new WaitForSeconds(0.1f);
-        rebote = 0;
+        move = 0;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

@@ -5,62 +5,68 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour {
+    // Velocity
     public float velocityX = 5f;
-    //public float movementX;
+    // Left or right
     public float inputX;
     public float newPosX;
+    // Where is mario looking
     public bool lookRight;
-
+    // Jump force
     public float jumpForce = 800f;
-
+    // Feet
     public Transform pie;
+    // How big is the feet
     public float radioPie = 0.1f;
+    // If is touching floor
     public LayerMask floor;
     public bool isFloor;
+    // If its couching
     public bool isCouch;
+    // Waiting time for no hit mario if he was hit
     public bool noHit;
+    // Check drift
     public int isDrift;
+    // Running with Z
     public bool isRun;
     public bool isMoving;
-
     Animator animator;
     Rigidbody2D rb;
     BoxCollider2D bc;
+    // Falldown
     public float falldown;
     public int right, left;
-
+    // Shell
     public GameObject Shell;
     public GameObject Mario;
-
+    // Raycast touching objects
     public GameObject raycast;
     private Vector3 startRaycastLeft;
     private Vector3 endRaycastLeft;
     private Vector3 startRaycastRight;
     private Vector3 endRaycastRight;
-
     public float raycastLength;
-
     public RuntimeAnimatorController[] Marios;
-    public int statusMario; //0 small 1 big 2 fire 3 hit
+    public int statusMario; //0 small 1 supermario 2 firemario 3 hit
     bool changeStatus;
     public bool marioHit;
-
+    // When hit change alphas
     Color alpha;
     Color marioAlpha;
-
+    // To do pause after touch mushrooms or flower
     public GameObject[] allObjects;
     public GameObject[] koopas;
     public GameObject[] goombas;
     public GameObject[] shells;
-
+    // Death of mario
     public bool marioDeath;
     public BoxCollider2D colliderDeath;
-
+    // Fireball
     public bool isThrow = true;
     public int countBalls=0;
     public GameObject fireball;
     public GameObject[] fireballs;
-
+    // Flag
     public bool isFlag = false;
 
     GameManager gm;
@@ -79,13 +85,14 @@ public class Movement : MonoBehaviour {
 
     void Update()
     {
+        // If mario small then animator and change the boxcollider small
         if (statusMario == 0)
         {
             animator.runtimeAnimatorController = Marios[0];
             bc.size = new Vector2(0.65f, 0.8f);
             bc.offset = new Vector2(0, 0.4f);
         }
-
+        // If supermario then animator and change the boxcollider big
         if (statusMario == 1)
         {
             animator.runtimeAnimatorController = Marios[1];
@@ -94,7 +101,7 @@ public class Movement : MonoBehaviour {
                 bc.offset = new Vector2(0, 0.8f);
             }
         }
-
+        // If fire mario  then animator and change the boxcollider big
         if (statusMario == 2)
         {
             animator.runtimeAnimatorController = Marios[2];
@@ -103,21 +110,21 @@ public class Movement : MonoBehaviour {
                 bc.offset = new Vector2(0, 0.8f);
             }
         }
-
+        // If mario was hit start Hit effect 
         if(marioHit)
         {
             gm.UpdateDebug("Mario hit");
             StartCoroutine(Hit());
             marioHit = false;
         }
-
+        // If mario death start Death effect
         if(marioDeath && statusMario != 4)
         {
             SoundSystem.ss.StopMusic();
             SoundSystem.ss.PlayDeath();
             StartCoroutine(Death());
         }
-
+        // Set al objects for pause
         allObjects = GameObject.FindObjectsOfType<GameObject>();
         koopas = GameObject.FindGameObjectsWithTag("koopa");
         goombas = GameObject.FindGameObjectsWithTag("goomba");
@@ -166,7 +173,7 @@ public class Movement : MonoBehaviour {
 
     void FixedUpdate () {
          inputX = Input.GetAxis("Horizontal");
-
+         // Mario move if its not couch, death and not flag
          if (!isCouch && isMoving && !marioDeath && !isFlag) {
             transform.position += new Vector3(inputX * velocityX * Time.deltaTime, 0, 0);
             newPosX = Mathf.Clamp(rb.transform.position.x, Camera.main.transform.position.x - 7.5f, Camera.main.transform.position.x + 7.5f);//-7.6f, 195f);
@@ -189,7 +196,7 @@ public class Movement : MonoBehaviour {
                 lookRight = false;
             }
         }
-
+         // If its moving and floor set animation
         if (inputX != 0 && isFloor)
         {
             animator.SetFloat("velocityX", 1);
@@ -199,8 +206,8 @@ public class Movement : MonoBehaviour {
             animator.SetFloat("velocityX", 0);
         }
 
+        // If is touching floor animation and if press space jump
         isFloor = Physics2D.OverlapCircle(pie.position, radioPie, floor);
-
         if (isFloor)
         {
             animator.SetBool("isFloor", true);
@@ -216,7 +223,7 @@ public class Movement : MonoBehaviour {
         {
             animator.SetBool("isFloor", false);
         }
-
+        //If press down arrow couch, and make collider smaller
         if (isFloor && Input.GetKey(KeyCode.DownArrow) && statusMario != 0)
         {
             bc.size = new Vector2(0.8f, 1.2f);
@@ -229,7 +236,7 @@ public class Movement : MonoBehaviour {
             isCouch = false;
             animator.SetBool("isCouch", false);
         }
-
+        // Falldown animation
         falldown = rb.velocity.y;
 
         if(falldown != 0 || falldown == 0)
@@ -239,6 +246,7 @@ public class Movement : MonoBehaviour {
 
         if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
         {
+            // Avoid rare effects left and arrow same time
             StartCoroutine(WaitingTime());
         }
 
@@ -302,7 +310,7 @@ public class Movement : MonoBehaviour {
             isMoving = false;
             changeStatus = false;
         }
-
+        // If its fire mario can throw 2 fireballs
         if(statusMario == 2)
         {
             fireballs = GameObject.FindGameObjectsWithTag("fireball");
@@ -322,7 +330,7 @@ public class Movement : MonoBehaviour {
             }
         }
     }
-
+    // Change mario status
     public void UpdateStatus(int newStatus)
     {
         changeStatus = true;
@@ -331,10 +339,12 @@ public class Movement : MonoBehaviour {
 
     public IEnumerator Pause()
     {
+        // Check last velocity
         Vector2 velAntes = rb.velocity;
+        // Stop mario
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
+        // Freeze enemies
         for (int i = 0; i < allObjects.Length; i++)
         {
             if (allObjects[i].tag == "koopa")
@@ -360,7 +370,7 @@ public class Movement : MonoBehaviour {
                 }
             }
         }
-
+        // If mario is not death powerUP!
         if(!marioDeath) {
             SoundSystem.ss.PlayPowerUp();
             if (statusMario == 1)
@@ -412,15 +422,15 @@ public class Movement : MonoBehaviour {
                 }
             }
         }
-
+        // Continue lat status
         rb.velocity = velAntes;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        //rb.isKinematic = false;
         isMoving = true;
     }
 
     public IEnumerator WaitingTime()
     {
+        // Wait for no double keys press
         yield return new WaitForSeconds(0.3f);
         isDrift = 0;
         left = 0;
@@ -430,6 +440,7 @@ public class Movement : MonoBehaviour {
 
     public IEnumerator NoHit()
     {
+        // Mario cant be hit if it was hit
         noHit = true;
         yield return new WaitForSeconds(0.5f);
         noHit = false;

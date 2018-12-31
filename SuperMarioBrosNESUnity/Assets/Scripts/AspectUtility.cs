@@ -2,7 +2,7 @@
 
 public class AspectUtility : MonoBehaviour
 {
-
+    // Public script for camera aspect ratio
     public float _wantedAspectRatio = 1.7777779f;
     static float wantedAspectRatio;
     static Camera cam;

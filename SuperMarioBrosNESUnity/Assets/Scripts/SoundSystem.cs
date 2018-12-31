@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundSystem : MonoBehaviour
 {
     public static SoundSystem ss;
+    // All audios
     public AudioSource audioLevel;
     public AudioSource audioCoin;
     public AudioSource audioJump;

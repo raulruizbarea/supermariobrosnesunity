@@ -5,18 +5,16 @@ using UnityEngine;
 
 public class WeakBlockCoins : MonoBehaviour
 {
+    // Animator for when no coins
     Animator animator;
-    Rigidbody2D rb;
     public bool hit;
-
+    // To check if its hit by mario
     public GameObject RaycastLeft;
     Vector3 startRaycastLeft;
     Vector3 endRaycastLeft;
-
     public GameObject RaycastCenter;
     Vector3 startRaycastCenter;
     Vector3 endRaycastCenter;
-
     public GameObject RaycastRight;
     Vector3 startRaycastRight;
     Vector3 endRaycastRight;
@@ -25,13 +23,13 @@ public class WeakBlockCoins : MonoBehaviour
 
     int statusMario;
     public GameObject Mario;
-    public int rebote;
+    public int move;
     Vector2 initialPosition;
 
     GameObject Gift;
     public GameObject GiftInstance;
     public Gifts giftCode;
-
+    // How many coins has
     int count;
 
     void Awake()
@@ -39,18 +37,15 @@ public class WeakBlockCoins : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
         Mario = GameObject.FindGameObjectWithTag("mario");
         initialPosition = gameObject.transform.position;
         hit = false;
         count = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
         statusMario = Mario.GetComponent<Movement>().statusMario;
@@ -80,6 +75,7 @@ public class WeakBlockCoins : MonoBehaviour
                 && statusMario != 4)
                 {
                     SoundSystem.ss.PlayBump();
+                    // To 8 coins
                     if (!hit && count < 8)
                     {
                         StartCoroutine(Rebote());
@@ -99,12 +95,12 @@ public class WeakBlockCoins : MonoBehaviour
             animator.SetBool("hit", true);
         }
 
-        if (rebote == 1)
+        if (move == 1)
         {
             transform.Translate(Vector3.up * 2 * Time.deltaTime);
         }
 
-        if (rebote == -1)
+        if (move == -1)
         {
             transform.Translate(Vector3.down * 2 * Time.deltaTime);
             gameObject.transform.position = initialPosition;
@@ -131,11 +127,11 @@ public class WeakBlockCoins : MonoBehaviour
 
     public IEnumerator Rebote()
     {
-        rebote = 1;
+        move = 1;
         yield return new WaitForSeconds(0.1f);
-        rebote = -1;
+        move = -1;
         yield return new WaitForSeconds(0.1f);
-        rebote = 0;
+        move = 0;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
